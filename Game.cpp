@@ -5,6 +5,11 @@
 #include "Game.hpp"
 #include "ctime"
 #include "cstdlib"
+#include "iostream"
+
+
+const int SPEED_NORMAL = 500;
+const int SPEED_QUICK = 50;
 
 
 Game::Game(int rows, int cols, int left, int top, int block_size) {
@@ -39,19 +44,24 @@ void Game::play() {
         if (update){
             update = false;
             update_window();
-
             clear_line();
         }
     }
 }
 
 void Game::init() {
-    delay = 30;
+    delay = SPEED_NORMAL;
     srand(time(NULL));
 
     initgraph(938, 896);
 
-    loadimage(&img_bg, "res/bg2.png")
+    loadimage(&img_bg, "../res/bg2.png");
+//    char data[20][10];
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            map[i][j] = 0;
+        }
+    }
 }
 
 void Game::key_event() {
@@ -59,12 +69,20 @@ void Game::key_event() {
 }
 
 void Game::update_window() {
-
+    putimage(0, 0, &img_bg);
 }
 
 int Game::get_delay() {
-
-    return 0;
+    static unsigned long last_time = 0;
+    auto current_time = GetTickCount();
+    if (last_time == 0) {
+        last_time = current_time;
+        return 0;
+    } else {
+        auto ret = current_time - last_time;
+        last_time = current_time;
+        return ret;
+    }
 }
 
 void Game::drop() {

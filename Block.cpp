@@ -15,7 +15,7 @@ int Block::size = 36;
 Block::Block() {
     if (images[0] == nullptr){
         IMAGE imgTmp;
-        loadimage(&imgTmp, "res/titles.png");
+        loadimage(&imgTmp, "res/tiles.png");
         SetWorkingImage(&imgTmp);
         for (int i = 0; i < 7; i++) {
             images[i] = new IMAGE;
