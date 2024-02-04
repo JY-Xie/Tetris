@@ -7,6 +7,9 @@
 #include "vector"
 #include "graphics.h"
 
+
+class Block;
+
 class Game {
 public:
     Game(int rows, int cols, int left, int top, int block_size);
@@ -29,6 +32,9 @@ private:
     int block_size;
     IMAGE img_bg;
 
+    Block *current_block;
+    Block *next_block;
+    Block *back_block;
 };
 
 

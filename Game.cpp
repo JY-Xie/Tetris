@@ -6,7 +6,7 @@
 #include "ctime"
 #include "cstdlib"
 #include "iostream"
-
+#include "Block.hpp"
 
 const int SPEED_NORMAL = 500;
 const int SPEED_QUICK = 50;
@@ -30,6 +30,10 @@ Game::Game(int rows, int cols, int left, int top, int block_size) {
 
 void Game::play() {
     init();
+
+    next_block = new Block;
+    current_block = next_block;
+    next_block = new Block;
 
     int timer = 0;
     while (true){
@@ -70,6 +74,21 @@ void Game::key_event() {
 
 void Game::update_window() {
     putimage(0, 0, &img_bg);
+    BeginBatchDraw();
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            if (map[i][j] == 0) continue;
+            int x = j * block_size + left_margin;
+            int y = i * block_size + top_margin;
+            putimage(x, y, &Block::images[i][j]);
+        }
+    }
+
+    current_block->draw(left_margin, top_margin);
+    next_block->draw(689, 150);
+    EndBatchDraw();
+//    Block block;
+//    block.draw(left_margin, top_margin);
 }
 
 int Game::get_delay() {
@@ -86,7 +105,16 @@ int Game::get_delay() {
 }
 
 void Game::drop() {
+    back_block = current_block;
+    current_block->drop();
 
+    if (!current_block->block_in_map(map)) {
+        back_block->solidify(map);
+
+        delete current_block;
+        current_block = next_block;
+        next_block = new Block;
+    }
 }
 
 void Game::clear_line() {

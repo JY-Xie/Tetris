@@ -15,7 +15,7 @@ int Block::size = 36;
 Block::Block() {
     if (images[0] == nullptr){
         IMAGE imgTmp;
-        loadimage(&imgTmp, "res/tiles.png");
+        loadimage(&imgTmp, "../res/tiles.png");
         SetWorkingImage(&imgTmp);
         for (int i = 0; i < 7; i++) {
             images[i] = new IMAGE;
@@ -58,7 +58,9 @@ Block::Block() {
 }
 
 void Block::drop() {
-
+    for (auto &block: small_blocks){
+        block.row++;
+    }
 }
 
 void Block::move_left_right(int offset) {
@@ -74,5 +76,52 @@ void Block::draw(int left_margin, int top_margin) {
         int x = left_margin + small_blocks[i].col * size;
         int y = top_margin + small_blocks[i].row * size;
         putimage(x, y, image);
+    }
+}
+
+Block &Block::operator=(const Block &other) {
+    if (this == &other) return *this;
+    this->block_type = other.block_type;
+    for (int i = 0; i < 4; i++) {
+        this->small_blocks[i] = other.small_blocks[i];
+    }
+    return *this;
+}
+
+bool Block::block_in_map(const std::vector<std::vector<int>> &map) {
+    auto rows = map.size();
+    auto cols = map[0].size();
+    for (int i = 0; i < 4; i++){
+        if (
+                small_blocks[i].col < 0 || small_blocks[i].col >= cols ||
+                small_blocks[i].row < 0 || small_blocks[i].row >= rows ||
+                map[small_blocks[i].row][small_blocks[i].col] != 0
+        ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Block::solidify(std::vector<std::vector<int>> &map) {
+    int rows = map.size();
+    int cols = map[0].size();
+
+    for (int i = 0; i < 4; i++) {
+        int row = small_blocks[i].row;
+        int col = small_blocks[i].col;
+
+        // 检查边界
+        if (row >= 0 && row < rows && col >= 0 && col < cols) {
+            map[row][col] = block_type;
+            std::cout << "ppp" << std::endl;
+        } else {
+            // 如果越界，这里可以添加错误处理代码，例如输出错误信息或者抛出异常
+            std::cerr << "Out of bounds access: row = " << row << ", col = " << col << std::endl;
+        }
+    }
+
+    for (int i = 0; i < 4; i++){
+        map[small_blocks[i].row][small_blocks[i].col] = block_type;
     }
 }

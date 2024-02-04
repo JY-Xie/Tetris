@@ -5,6 +5,8 @@
 #ifndef TETRIS_BLOCK_HPP
 #define TETRIS_BLOCK_HPP
 #include "graphics.h"
+#include "Game.hpp"
+#include "vector"
 
 struct Point{
     int row;
@@ -19,12 +21,18 @@ public:
     void move_left_right(int offset);
     void rotate();
     void draw(int left_margin, int top_margin);
+
+    Block& operator=(const Block& other);
+//    Point * get_small_blocks();
+    bool block_in_map(const std::vector<std::vector<int>> &map);
+    void solidify(std::vector<std::vector<int>> &map);
 private:
     int block_type;
     Point small_blocks[4];
     IMAGE *image;
     static IMAGE *images[7];
     static int size;
+    friend class Game;
 };
 
 
