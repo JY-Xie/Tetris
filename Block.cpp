@@ -57,7 +57,9 @@ void Block::drop() {
 }
 
 void Block::move_left_right(int offset) {
-
+    for (int i = 0; i < 4; i++){
+        small_blocks[i].col += offset;
+    }
 }
 
 void Block::rotate() {

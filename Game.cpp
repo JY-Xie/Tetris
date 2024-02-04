@@ -69,6 +69,42 @@ void Game::init() {
 
 void Game::key_event() {
     // update = true;
+    int dx = 0;
+    bool rotate_flag = false;
+    while (_kbhit()) {
+        unsigned char ch = _getch();
+        if (ch == 224) {
+            ch = _getch();
+            switch (ch) {
+                case 72:
+                    rotate_flag = true;
+                    break;
+                case 80:
+                    delay = SPEED_QUICK;
+                    break;
+                case 75:
+                    dx = -1;
+                    break;
+                case 77:
+                    dx = 1;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+    }
+
+    if (rotate_flag) {
+
+    }
+
+    if (dx != 0) {
+        move_left_right(dx);
+        update = true;
+    }
+
 }
 
 void Game::update_window() {
@@ -80,8 +116,7 @@ void Game::update_window() {
             if (map[i][j] == 0) continue;
             int x = j * block_size + left_margin;
             int y = i * block_size + top_margin;
-            std::cout << map[i][j]-1 << std::endl;
-            putimage(x, y, imgs[map[i][j]-1]);
+            putimage(x, y, imgs[map[i][j]]);
         }
 
     }
@@ -116,8 +151,19 @@ void Game::drop() {
         current_block = next_block;
         next_block = new Block;
     }
+
+    delay = SPEED_NORMAL;
 }
 
 void Game::clear_line() {
 
+}
+
+void Game::move_left_right(int offset) {
+    back_block = *current_block;
+    current_block->move_left_right(offset);
+
+    if (!current_block->block_in_map(map)) {
+        *current_block = back_block;
+    }
 }

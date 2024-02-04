@@ -21,6 +21,8 @@ private:
     int get_delay();
     void drop();
     void clear_line();
+    void move_left_right(int offset);
+
 private:
     int delay;
     bool update;

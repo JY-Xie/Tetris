@@ -6,6 +6,7 @@
 #define TETRIS_BLOCK_HPP
 #include "graphics.h"
 #include "vector"
+#include "conio.h"
 
 struct Point{
     int row;
