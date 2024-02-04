@@ -6,9 +6,9 @@
 #define TETRIS_GAME_HPP
 #include "vector"
 #include "graphics.h"
+#include "Block.hpp"
 
 
-class Block;
 
 class Game {
 public:
@@ -34,7 +34,7 @@ private:
 
     Block *current_block;
     Block *next_block;
-    Block *back_block;
+    Block back_block;
 };
 
 

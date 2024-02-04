@@ -34,7 +34,6 @@ void Game::play() {
     next_block = new Block;
     current_block = next_block;
     next_block = new Block;
-
     int timer = 0;
     while (true){
         key_event();
@@ -75,13 +74,16 @@ void Game::key_event() {
 void Game::update_window() {
     putimage(0, 0, &img_bg);
     BeginBatchDraw();
+    IMAGE ** imgs = Block::getImages();
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
             if (map[i][j] == 0) continue;
             int x = j * block_size + left_margin;
             int y = i * block_size + top_margin;
-            putimage(x, y, &Block::images[i][j]);
+            std::cout << map[i][j]-1 << std::endl;
+            putimage(x, y, imgs[map[i][j]-1]);
         }
+
     }
 
     current_block->draw(left_margin, top_margin);
@@ -105,12 +107,11 @@ int Game::get_delay() {
 }
 
 void Game::drop() {
-    back_block = current_block;
+    back_block = *current_block;
     current_block->drop();
 
     if (!current_block->block_in_map(map)) {
-        back_block->solidify(map);
-
+        back_block.solidify(map);
         delete current_block;
         current_block = next_block;
         next_block = new Block;
