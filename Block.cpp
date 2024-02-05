@@ -63,7 +63,12 @@ void Block::move_left_right(int offset) {
 }
 
 void Block::rotate() {
-
+    Point p = small_blocks[1];
+    for (int i = 0; i < 4; i++) {
+        Point tmp = small_blocks[i];
+        small_blocks[i].col = p.col - tmp.row + p.row;
+        small_blocks[i].row = p.row - tmp.col + p.col;
+    }
 }
 
 void Block::draw(int left_margin, int top_margin) {
@@ -108,4 +113,8 @@ void Block::solidify(std::vector<std::vector<int>> &map) {
 
 IMAGE **Block::getImages() {
     return images;
+}
+
+int Block::get_block_type() const {
+    return block_type;
 }

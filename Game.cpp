@@ -97,7 +97,8 @@ void Game::key_event() {
     }
 
     if (rotate_flag) {
-
+        rotate();
+        update = true;
     }
 
     if (dx != 0) {
@@ -124,8 +125,6 @@ void Game::update_window() {
     current_block->draw(left_margin, top_margin);
     next_block->draw(689, 150);
     EndBatchDraw();
-//    Block block;
-//    block.draw(left_margin, top_margin);
 }
 
 int Game::get_delay() {
@@ -163,6 +162,17 @@ void Game::move_left_right(int offset) {
     back_block = *current_block;
     current_block->move_left_right(offset);
 
+    if (!current_block->block_in_map(map)) {
+        *current_block = back_block;
+    }
+}
+
+void Game::rotate() {
+    if (current_block->get_block_type() == 6) {
+        return;
+    }
+    back_block = *current_block;
+    current_block->rotate();
     if (!current_block->block_in_map(map)) {
         *current_block = back_block;
     }

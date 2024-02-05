@@ -26,6 +26,8 @@ public:
     bool block_in_map(const std::vector<std::vector<int>> &map);
     void solidify(std::vector<std::vector<int>> &map);
     static IMAGE ** getImages();
+    int get_block_type() const;
+
 private:
     int block_type;
     Point small_blocks[4];
