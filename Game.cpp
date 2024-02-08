@@ -155,6 +155,23 @@ void Game::drop() {
 }
 
 void Game::clear_line() {
+    int lines = 0;
+    int k = rows-1;
+    for (int i = rows-1; i >= 0; i--) {
+        int count = 0;
+        for (int j = 0; j < cols; j++) {
+            if (map[i][j]) {
+                count++;
+            }
+            map[k][j] = map[i][j];
+        }
+
+        if (count < cols) {
+            k--;
+        } else {
+            lines++;
+        }
+    }
 
 }
 
